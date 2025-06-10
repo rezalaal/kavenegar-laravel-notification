@@ -1,49 +1,55 @@
-# Kavenegar notifications channel for Laravel 5.3 | 5.4
+# Kavenegar Notifications Channel for Laravel 12+
 
-This package makes it easy to send [Kavenegar SMS notifications](http://kavenegar.com/) with Laravel 5.3 or 5.4.
+این پکیج کار ارسال آسان پیامک با استفاده از سرویس کاوه‌نگار را در Laravel 12 و بالاتر فراهم می‌کند.
 
-## Contents
+## فهرست مطالب
 
-- [Installation](#installation)
-    - [Setting up your Kavenegar account](#setting-up-your-kavenegar-account)
-- [Usage](#usage)
-- [Contributing](#contributing)
+- [نصب](#installation)
+    - [راه‌اندازی حساب کاربری کاوه‌نگار](#setting-up-your-kavenegar-account)
+- [نحوه استفاده](#usage)
+- [مشارکت در توسعه](#contributing)
+
+---
 
 ## Installation
 
-You can install the package via composer:
+می‌توانید پکیج را با استفاده از کامپوزر نصب کنید:
 
-``` bash
+```bash
 composer require kavenegar/laravel-notification
 ```
 
-You must install the service provider:
+در لاراول 12+ دیگر نیازی به اضافه کردن دستی سرویس‌پرووایدر در config/app.php نیست، چون سرویس‌پرووایدر به صورت خودکار (با توجه به extra.laravel.providers در composer.json) ثبت می‌شود.
 
-```php
-// config/app.php
-'providers' => [
-    ...
-    Kavenegar\LaravelNotification\KavenegarServiceProvider::class,
-],
-```
+فقط کافی است تنظیمات زیر را انجام دهید.
 
-### Setting up your Kavenegar account
 
-Add your Kavenegar Account Key and Sender Number (optional) to your `config/services.php`:
+### راه‌اندازی حساب کاربری کاوه‌نگار
+
+
+کلید API و شماره فرستنده خود را در فایل config/services.php اضافه کنید:
+`config/services.php`:
 
 ```php
 // config/services.php
-...
+
 'kavenegar' => [
     'key' => env('KAVENEGAR_API_KEY'),
-    'sender' => env('KAVENEGAR_SENDER')
+    'sender' => env('KAVENEGAR_SENDER'),
 ],
-...
+
+```
+
+و در فایل .env مقداردهی کنید:
+```php
+KAVENEGAR_API_KEY=your_api_key_here
+KAVENEGAR_SENDER=your_sender_number_here
 ```
 
 ## Usage
 
-Now you can use the channel in your `via()` method inside the notification:
+برای استفاده از کانال در نوتیفیکیشن خود، در متد via() آن کانال را معرفی کنید:
+
 
 ``` php
 use Kavenegar\LaravelNotification\KavenegarChannel;
@@ -61,16 +67,18 @@ class HappyNewYear extends Notification
         return 'Happy new year :D';
     }
 }
+
 ```
 
-In order to let your Notification know which phone number you are sending to, add the `routeNotificationForSms` method to your Notifiable model e.g your User Model
-
+### تنظیم شماره موبایل گیرنده
+برای اینکه نوتیفیکیشن بداند پیامک را به کدام شماره ارسال کند، در مدل قابل نوتیفیکیشن (مثلاً مدل User) متد زیر را اضافه کنید:
 ```php
 public function routeNotificationForSms()
 {
-    return $this->phone; // where `phone` is a field in your users table;
+    return $this->phone; // فرض بر این است که شماره موبایل در فیلد phone ذخیره شده است
 }
 ```
+
 
 ## Contributing
 

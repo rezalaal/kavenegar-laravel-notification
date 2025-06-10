@@ -1,12 +1,12 @@
 {
-    "name": "kavenegar/laravel-notification",
-    "description": "laravel notificatiion channel for Kavenegar",
-    "type": "laravel-package",
-    "keywords": ["laravel","kavenegar","sms","notificatiion","api"],
+    "name": "rezalaal/laravel-notification",
+    "description": "Laravel notification channel for Kavenegar",
+    "type": "library",
+    "keywords": ["laravel", "kavenegar", "sms", "notification", "api"],
     "license": "MIT",
-	"authors": [
+    "authors": [
         {
-            "name" : "Kavenegar API Team",
+            "name": "Kavenegar API Team",
             "email": "support@kavenegar.com"
         },
         {
@@ -15,19 +15,31 @@
         }
     ],
     "require": {
-        "kavenegar/php": "*"
+        "php": "^8.2",
+        "illuminate/notifications": "^12.0",
+        "kavenegar/php": "^1.0"
     },
     "autoload": {
         "psr-4": {
             "Kavenegar\\LaravelNotification\\": "src/"
         }
     },
-    "minimum-stability" : "stable",
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
     "extra": {
         "laravel": {
             "providers": [
                 "Kavenegar\\LaravelNotification\\KavenegarServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.6",
+        "phpunit/phpunit": "^12.2",
+        "orchestra/testbench": "^10.4"
     }
 }

@@ -4,14 +4,14 @@ namespace Kavenegar\LaravelNotification;
 
 use Illuminate\Notifications\Notification;
 use Kavenegar\KavenegarApi;
+use Throwable;
 
 class KavenegarChannel
 {
-    protected $api;
+    protected KavenegarApi $api;
 
     /**
-     * KavenegarChannel constructor.
-     * @param KSP $api
+     * Create a new Kavenegar channel instance.
      */
     public function __construct(KavenegarApi $api)
     {
@@ -21,18 +21,27 @@ class KavenegarChannel
     /**
      * Send the given notification.
      *
-     * @param  mixed $notifiable
-     * @param  \Illuminate\Notifications\Notification $notification
+     * @param  mixed  $notifiable
+     * @param  Notification  $notification
      * @return void
-     * @throws Exception
+     * @throws Throwable
      */
-    public function send($notifiable, Notification $notification)
+    public function send(mixed $notifiable, Notification $notification): void
     {
         $sender = config('services.kavenegar.sender');
         $receptor = $notifiable->routeNotificationFor('sms');
+
+        // اگر گیرنده یا پیام خالی باشد، ارسال انجام نشود
+        if (empty($receptor)) {
+            return;
+        }
+
         $message = $notification->toSMS($notifiable);
 
-        $this->api->Send($sender, $receptor, $message);
+        try {
+            $this->api->Send($sender, $receptor, $message);
+        } catch (Throwable $e) {
+            report($e); // لاگ یا هندل بهتر
+        }
     }
-
 }
